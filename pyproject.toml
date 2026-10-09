@@ -1,0 +1,123 @@
+[project]
+name = "nobelgenderbias"
+version = "0.1.0"
+description = "Nobel Gender Bias Analysis - Bayesian modeling of gender bias in Nobel Prize awards using PyMC"
+readme = "README.md"
+authors = [
+    { name = "Per Lunnemann"}
+]
+requires-python = ">=3.14"
+dependencies = [
+    "numpy>=2.3.3",
+    "pandas>=2.3.0",
+    "matplotlib>=3.10.0",
+    "seaborn>=0.13.0",
+    "pymc>=6.3.2",
+    "scipy>=1.18.0",
+    "arviz>=0.22.0",
+    "openpyxl>=3.1.5",
+    "altair[all]>=6.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.0.1",
+    "jupyter>=1.1.1",
+    "pyright>=1.1.406",
+    "pytest>=6.0",
+    "ruff>=0.14.0",
+]
+
+[tool.ruff]
+
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+# Same as Black.
+line-length = 100
+
+# Assume Python 3.14.
+target-version = "py314"
+
+[tool.ruff.format]
+skip-magic-trailing-comma = true
+line-ending = "lf"
+docstring-code-line-length = 100
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    "ANN001", # flake8-annotations
+    "ANN201", # flake8-annotations
+    "B",      # flake8-bugbear
+    "C90",    # mccabe complexity
+    "E",      # pycodestyle
+    "F",      # pyflakes
+    "I",      # isort
+    "PD",     # pandas-vet
+    "RUF100", # unused noqa directive
+    "S",      # flake8-bandit
+    "TID252", # Relative imports from parent modules are banned
+]
+fixable = ["A", "B", "C", "D", "E", "F", "I"]
+unfixable = []
+ignore = ["E501"] # Avoid enforcing line-length violations
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
+
+[tool.ruff.lint.isort]
+
+split-on-trailing-comma=false
+known-third-party = ["mlflow","hydra","omegaconf"]
+
+
+[tool.ruff.lint.per-file-ignores]
+# asserts are ACTUALLY allowed in tests :)
+"**/tests/**" = ["S101"]
+
+[tool.ty.environment]
+python-version = "3.14"
+# "." (repo root) is an import root so the top-level `integration_test` package
+# resolves for the fast unit tests that reuse its pure helpers
+# (see tests/worker/test_smoke_plan_date.py). ./src and ./tests keep first-party
+# module resolution working as before.
+root = ["./src", "./tests", "."]
+
+[tool.ty.src]
+include = ["src", "notebooks", "tests", "scripts"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src", "scripts" = "scripts"}
+packages = ["nobelgenderbias", "scripts"]
+
+[project.scripts]
+nobel-analysis = "scripts.run_analysis:main"
+nobel-test = "scripts.test_analysis:run_all_tests"

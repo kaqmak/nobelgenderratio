@@ -1,0 +1,4838 @@
+{
+  "schema_version": 1,
+  "purpose": "README illustration snapshots from real Bayesian samples of the current log-odds model",
+  "model": {
+    "formulation": "logit(theta[t,j]) = logit(r[t,j]) + log_alpha[j]; alpha[j] multiplies workforce odds",
+    "theta_interior": "alpha[j] * r[t,j] / (1 - r[t,j] + alpha[j] * r[t,j])",
+    "endpoints": "theta=0 for r=0; theta=1 for r=1",
+    "hierarchy": [
+      "mu ~ Normal(0,1)",
+      "sigma ~ TruncatedNormal(1,0.5,lower=0)",
+      "log_alpha_offset[j] ~ Normal(0,1)",
+      "log_alpha[j] = mu + sigma*log_alpha_offset[j]",
+      "alpha[j] = exp(log_alpha[j])",
+      "y[t,j] ~ Binomial(total[t,j],theta[t,j])"
+    ],
+    "free_variables": [
+      "mu",
+      "sigma",
+      "log_alpha_offset"
+    ],
+    "deterministic_variables": [
+      "log_alpha",
+      "alpha",
+      "theta"
+    ]
+  },
+  "preprocessing": {
+    "method": "NobelGenderBiasAnalysis.load_data(); prepare_stan_data(position=\"senior\", delay=lag)",
+    "data_files": [
+      "data/genderDistribution_v2.csv",
+      "data/nobelLaurates.csv",
+      "data/femaleNobelsL.csv"
+    ],
+    "synthetic_data_used": false,
+    "workforce_year": "award Year - delay",
+    "missing_ratios": "Existing analysis sigmoid extrapolation, without driver modifications"
+  },
+  "input_sha256": {
+    "src/nobelgenderbias/analysis.py": "341566bd7ebb2bb98e4791ee8f455b73529f86020994e988cea89e947e43d66e",
+    "data/genderDistribution_v2.csv": "8526b3d16481147b9ae6b69bea5f3e6595e400d05acb242d3b1393fa99313ba0",
+    "data/nobelLaurates.csv": "5f358feb6383280f82ba1bcbd8b9406e22c50a5dacf1a827d27fe064f4a3096f",
+    "data/femaleNobelsL.csv": "ad9d6335744d1c150f422d74adadb03f97a4cc850eca7e1d3e8ea2a4838f1916"
+  },
+  "versions": {
+    "pymc": "6.3.2",
+    "pytensor": "3.3.3",
+    "nutpie": null,
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "xarray": "2026.9.0",
+    "arviz-stats": "1.3.3",
+    "arviz-base": "1.3.1",
+    "matplotlib": "3.11.2",
+    "scipy": "1.18.1"
+  },
+  "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "platform": "macOS-26.7-arm64-arm-64bit-Mach-O",
+  "environment": {
+    "MPLBACKEND": "Agg",
+    "MPLCONFIGDIR": "/Users/kaqmak/repos/personal/nobelgenderratio/.pytest_cache/matplotlib",
+    "NUMBA_CACHE_DIR": "/Users/kaqmak/repos/personal/nobelgenderratio/.pytest_cache/numba",
+    "PYTENSOR_FLAGS": "cxx=,base_compiledir=/Users/kaqmak/repos/personal/nobelgenderratio/.pytest_cache/pytensor"
+  },
+  "sampling": {
+    "api": "pm.sample with analysis.build_pymc_model; automatic installed NUTS backend",
+    "resolved_nuts_sampler": "pymc",
+    "initialization": "jitter+adapt_diag (reported by sampler)",
+    "posterior_draws_total": 2120000,
+    "discarded_warmup_draws_total": 44000,
+    "seed_policy": "Independent deterministic integer random_seed per run; PyMC spawns chain RNG streams internally",
+    "illustration_posterior": {
+      "label": "illustration_lag10",
+      "lag": 10,
+      "position": "senior",
+      "draws_per_chain": 10000,
+      "chains": 2,
+      "cores": 2,
+      "tune_per_chain": 1000,
+      "target_accept": 0.99,
+      "random_seed": 2026100901,
+      "stored_variables": [
+        "mu",
+        "sigma",
+        "alpha"
+      ],
+      "prior_sampling": false,
+      "started_at_utc": "2026-10-09T07:27:48.587591+00:00",
+      "finished_sampling_at_utc": "2026-10-09T07:27:59.255955+00:00",
+      "sampling_and_preprocessing_seconds": 10.639675958023872,
+      "prize_names": [
+        "Chemistry",
+        "Economics",
+        "PhysMed",
+        "Physics"
+      ],
+      "data": {
+        "shape": [
+          125,
+          4
+        ],
+        "workforce_ratio_min": 0.027955279863590903,
+        "workforce_ratio_max": 0.38832997987927564,
+        "total_laureates_by_field": [
+          200,
+          99,
+          232,
+          230
+        ],
+        "female_laureates_by_field": [
+          7,
+          3,
+          12,
+          4
+        ]
+      },
+      "trace_type": "xarray.core.datatree.DataTree",
+      "posterior_attrs": {
+        "created_at": "2026-10-09T07:27:59.180369+00:00",
+        "creation_library": "ArviZ",
+        "creation_library_version": "1.3.1",
+        "creation_library_language": "Python",
+        "inference_library": "pymc",
+        "inference_library_version": "6.3.2",
+        "sample_dims": [
+          "chain",
+          "draw"
+        ],
+        "sampling_time": 8.921174049377441,
+        "tuning_steps": 1000
+      },
+      "root_attrs": {},
+      "diagnostics": {
+        "helper": "arviz_stats",
+        "sample_stats_variables": [
+          "tree_depth",
+          "divergences",
+          "diverging",
+          "perf_counter_start",
+          "acceptance_rate",
+          "energy",
+          "smallest_eigval",
+          "reached_max_treedepth",
+          "process_time_diff",
+          "largest_eigval",
+          "energy_error",
+          "lp",
+          "perf_counter_diff",
+          "step_size_bar",
+          "step_size",
+          "n_steps",
+          "max_energy_error",
+          "index_in_trajectory"
+        ],
+        "unavailable": {},
+        "rhat_rank": {
+          "mu": 1.0000920337715495,
+          "sigma": 0.9999902027404551,
+          "alpha": {
+            "Chemistry": 1.0001164909617912,
+            "Economics": 0.9999968005591235,
+            "PhysMed": 0.9999756281373374,
+            "Physics": 0.9999305041296236
+          }
+        },
+        "ess_bulk": {
+          "mu": 5023.701393253624,
+          "sigma": 4628.640605933425,
+          "alpha": {
+            "Chemistry": 15035.173770615558,
+            "Economics": 12604.026293526382,
+            "PhysMed": 22875.74962334029,
+            "Physics": 18809.87086256541
+          }
+        },
+        "ess_tail": {
+          "mu": 5850.93577708717,
+          "sigma": 5834.335430484536,
+          "alpha": {
+            "Chemistry": 14177.142237003505,
+            "Economics": 11872.976362712896,
+            "PhysMed": 17215.041917871855,
+            "Physics": 15646.718276592524
+          }
+        },
+        "mcse_mean": {
+          "mu": 0.006177124252399509,
+          "sigma": 0.005559553445514381,
+          "alpha": {
+            "Chemistry": 0.001474139626723613,
+            "Economics": 0.0008635698531030065,
+            "PhysMed": 0.0007810297843539025,
+            "Physics": 0.0009467094258841356
+          }
+        },
+        "divergences_by_chain": [
+          0,
+          0
+        ],
+        "divergences_total": 0,
+        "max_treedepth_hits_by_chain": [
+          0,
+          0
+        ],
+        "acceptance_rate": {
+          "min": 0.6563615831087424,
+          "max": 1.0000000000000004,
+          "mean": 0.9882757444597093
+        },
+        "tree_depth": {
+          "min": 2,
+          "max": 7,
+          "mean": 4.69285
+        },
+        "n_steps": {
+          "min": 3.0,
+          "max": 127.0,
+          "mean": 26.982
+        },
+        "step_size": {
+          "min": 0.11284401888600719,
+          "max": 0.14201126563066843,
+          "mean": 0.1274276422583378
+        },
+        "max_rhat_rank": 1.0001164909617912,
+        "min_ess_bulk": 4628.640605933425,
+        "min_ess_tail": 5834.335430484536,
+        "convergence_screen": {
+          "passed": true,
+          "concerns": [],
+          "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+        }
+      },
+      "total_run_seconds": 10.723569708003197
+    },
+    "illustration_prior": {
+      "draws": 20000,
+      "method": "pm.sample_prior_predictive; independent generative prior draws, not MCMC",
+      "random_seed": 2026100902,
+      "stored_variables": [
+        "alpha"
+      ],
+      "lag": 10,
+      "prize_names": [
+        "Chemistry",
+        "Economics",
+        "PhysMed",
+        "Physics"
+      ],
+      "started_at_utc": "2026-10-09T07:27:59.315025+00:00",
+      "finished_at_utc": "2026-10-09T07:28:02.299528+00:00",
+      "elapsed_seconds": 2.9845085000270046,
+      "fraction_alpha_above_2_5_by_field": {
+        "Chemistry": 0.2621,
+        "Economics": 0.2574,
+        "PhysMed": 0.25435,
+        "Physics": 0.26275
+      }
+    },
+    "delay_sweep": [
+      {
+        "label": "sweep_00",
+        "lag": 0,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110000,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:28:15.246329+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:29:05.881846+00:00",
+        "sampling_and_preprocessing_seconds": 50.49077375000343,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.028000489550934187,
+          "workforce_ratio_max": 0.4315962894307199,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:29:05.570212+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 46.18827486038208,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.000053636855462,
+            "sigma": 1.0000925069126632,
+            "alpha": {
+              "Chemistry": 1.0000083221645166,
+              "Economics": 1.000041967635364,
+              "PhysMed": 1.0000434207954305,
+              "Physics": 1.0000088344641962
+            }
+          },
+          "ess_bulk": {
+            "mu": 24404.786165755024,
+            "sigma": 21108.09566196587,
+            "alpha": {
+              "Chemistry": 72123.68183876276,
+              "Economics": 54269.91996472337,
+              "PhysMed": 105961.8192202541,
+              "Physics": 90544.11650423643
+            }
+          },
+          "ess_tail": {
+            "mu": 27244.454278098074,
+            "sigma": 24368.649871506692,
+            "alpha": {
+              "Chemistry": 69405.12019873555,
+              "Economics": 51936.17751608535,
+              "PhysMed": 82833.29898861595,
+              "Physics": 75457.09214408605
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.00290047748376636,
+            "sigma": 0.0026178863974105036,
+            "alpha": {
+              "Chemistry": 0.0004610882213696019,
+              "Economics": 0.00029180488624527687,
+              "PhysMed": 0.00023677428139799522,
+              "Physics": 0.0002939644575848167
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.45602324230450453,
+            "max": 1.0000000000000004,
+            "mean": 0.9874922560929754
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.67259
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 26.58128
+          },
+          "step_size": {
+            "min": 0.09132270269371767,
+            "max": 0.1408247454572043,
+            "mean": 0.11607372407546097
+          },
+          "max_rhat_rank": 1.0000925069126632,
+          "min_ess_bulk": 21108.09566196587,
+          "min_ess_tail": 24368.649871506692,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 42,
+            "count_alpha_ge_1_by_chain": [
+              18,
+              24
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00042,
+            "indicator_ess_mean": 95534.67323564531,
+            "indicator_mcse_mean": 6.629107846273187e-05
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "Physics": {
+            "count_alpha_ge_1": 1,
+            "count_alpha_ge_1_by_chain": [
+              1,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 1e-05,
+            "indicator_ess_mean": 100008.0009601024,
+            "indicator_mcse_mean": 9.99959997599904e-06
+          }
+        },
+        "total_run_seconds": 50.929968084034044
+      },
+      {
+        "label": "sweep_01",
+        "lag": 1,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110001,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:29:06.181766+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:29:51.146550+00:00",
+        "sampling_and_preprocessing_seconds": 44.823252541944385,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027994002795708357,
+          "workforce_ratio_max": 0.42777328139640325,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:29:50.853216+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 43.0857617855072,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0001591082228831,
+            "sigma": 1.0000823889120383,
+            "alpha": {
+              "Chemistry": 1.0000636485536234,
+              "Economics": 1.0000216881486619,
+              "PhysMed": 1.0000217786823324,
+              "Physics": 1.0000518393274334
+            }
+          },
+          "ess_bulk": {
+            "mu": 26567.088627527755,
+            "sigma": 17798.68102826135,
+            "alpha": {
+              "Chemistry": 66527.23879261414,
+              "Economics": 50969.87279880434,
+              "PhysMed": 112685.87687295728,
+              "Physics": 94244.78828214385
+            }
+          },
+          "ess_tail": {
+            "mu": 28979.345651734388,
+            "sigma": 20187.48049799197,
+            "alpha": {
+              "Chemistry": 66761.59363083894,
+              "Economics": 48940.9543293843,
+              "PhysMed": 83401.50954504215,
+              "Physics": 78257.60150188419
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.0028422451161602834,
+            "sigma": 0.0028606800139381505,
+            "alpha": {
+              "Chemistry": 0.0004899351732465317,
+              "Economics": 0.0003093449797214076,
+              "PhysMed": 0.00024073158254162374,
+              "Physics": 0.0003015450264763577
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.5932707799915239,
+            "max": 1.0000000000000004,
+            "mean": 0.9895069596836531
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.77825
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 28.62232
+          },
+          "step_size": {
+            "min": 0.10767245963298089,
+            "max": 0.1281099513459358,
+            "mean": 0.11789120548945838
+          },
+          "max_rhat_rank": 1.0001591082228831,
+          "min_ess_bulk": 17798.68102826135,
+          "min_ess_tail": 20187.48049799197,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 74,
+            "count_alpha_ge_1_by_chain": [
+              25,
+              49
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00074,
+            "indicator_ess_mean": 82720.06868266917,
+            "indicator_mcse_mean": 9.454788966865929e-05
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 1,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              1
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 1e-05,
+            "indicator_ess_mean": 100008.0009601024,
+            "indicator_mcse_mean": 9.99959997599904e-06
+          },
+          "Physics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          }
+        },
+        "total_run_seconds": 45.24677037494257
+      },
+      {
+        "label": "sweep_02",
+        "lag": 2,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110002,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:29:51.432444+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:30:33.161702+00:00",
+        "sampling_and_preprocessing_seconds": 41.5876461250009,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027988057387656237,
+          "workforce_ratio_max": 0.4236838227701132,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:30:32.848393+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 39.784608602523804,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000409456349386,
+            "sigma": 1.0001280551970888,
+            "alpha": {
+              "Chemistry": 1.0000041488495697,
+              "Economics": 1.0001372749511293,
+              "PhysMed": 1.0000132386254736,
+              "Physics": 0.9999905918420169
+            }
+          },
+          "ess_bulk": {
+            "mu": 24707.394206427318,
+            "sigma": 21822.697846587314,
+            "alpha": {
+              "Chemistry": 72778.01776339169,
+              "Economics": 59333.83408539834,
+              "PhysMed": 110500.67441080401,
+              "Physics": 92191.26244140457
+            }
+          },
+          "ess_tail": {
+            "mu": 26396.730801555965,
+            "sigma": 24646.321402624366,
+            "alpha": {
+              "Chemistry": 68130.86372043141,
+              "Economics": 53179.46859517787,
+              "PhysMed": 83002.95448019533,
+              "Physics": 74554.93607334256
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002893456076181319,
+            "sigma": 0.0025862848306255123,
+            "alpha": {
+              "Chemistry": 0.0004917147910818538,
+              "Economics": 0.00029891007797698326,
+              "PhysMed": 0.00025250533837976245,
+              "Physics": 0.0003121388724036969
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.09640952629998467,
+            "max": 1.0000000000000004,
+            "mean": 0.982809138562601
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.50534
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 23.7529
+          },
+          "step_size": {
+            "min": 0.12302126839682573,
+            "max": 0.12824874805884592,
+            "mean": 0.1256350082278358
+          },
+          "max_rhat_rank": 1.0001372749511293,
+          "min_ess_bulk": 21822.697846587314,
+          "min_ess_tail": 24646.321402624366,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 102,
+            "count_alpha_ge_1_by_chain": [
+              55,
+              47
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00102,
+            "indicator_ess_mean": 94628.16894416563,
+            "indicator_mcse_mean": 0.00010376967005461607
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "Physics": {
+            "count_alpha_ge_1": 1,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              1
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 1e-05,
+            "indicator_ess_mean": 100008.0009601024,
+            "indicator_mcse_mean": 9.99959997599904e-06
+          }
+        },
+        "total_run_seconds": 42.011874167015776
+      },
+      {
+        "label": "sweep_03",
+        "lag": 3,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110003,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:30:33.450242+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:31:16.955028+00:00",
+        "sampling_and_preprocessing_seconds": 43.36612174997572,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027982608161604684,
+          "workforce_ratio_max": 0.42173112338858193,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:31:16.663379+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 41.543112993240356,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000660412099114,
+            "sigma": 1.000024755188968,
+            "alpha": {
+              "Chemistry": 1.0000015051450029,
+              "Economics": 1.00004757614183,
+              "PhysMed": 0.999997018420166,
+              "Physics": 1.0000203246454835
+            }
+          },
+          "ess_bulk": {
+            "mu": 26141.051540063116,
+            "sigma": 21437.279508835985,
+            "alpha": {
+              "Chemistry": 72328.21543079623,
+              "Economics": 54654.43375934027,
+              "PhysMed": 110733.74976485863,
+              "Physics": 85945.70579971619
+            }
+          },
+          "ess_tail": {
+            "mu": 26298.590846661624,
+            "sigma": 24626.428260567576,
+            "alpha": {
+              "Chemistry": 68128.40846142657,
+              "Economics": 50174.482508793575,
+              "PhysMed": 84928.47980347305,
+              "Physics": 77735.17919731181
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.0028847460872709362,
+            "sigma": 0.0026089928022558157,
+            "alpha": {
+              "Chemistry": 0.0005110549617392503,
+              "Economics": 0.0003229514194666098,
+              "PhysMed": 0.00026151040524929035,
+              "Physics": 0.00033866008319442185
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.5057356924070687,
+            "max": 1.0000000000000004,
+            "mean": 0.9865406339314107
+          },
+          "tree_depth": {
+            "min": 1,
+            "max": 7,
+            "mean": 4.67534
+          },
+          "n_steps": {
+            "min": 1.0,
+            "max": 95.0,
+            "mean": 26.59506
+          },
+          "step_size": {
+            "min": 0.13184093150199672,
+            "max": 0.14225023537234885,
+            "mean": 0.13704558343717282
+          },
+          "max_rhat_rank": 1.0000660412099114,
+          "min_ess_bulk": 21437.279508835985,
+          "min_ess_tail": 24626.428260567576,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 144,
+            "count_alpha_ge_1_by_chain": [
+              70,
+              74
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00144,
+            "indicator_ess_mean": 83599.09685991624,
+            "indicator_mcse_mean": 0.00013115042651746185
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "Physics": {
+            "count_alpha_ge_1": 3,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              3
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 3e-05,
+            "indicator_ess_mean": 100011.5574165729,
+            "indicator_mcse_mean": 1.7319334063133196e-05
+          }
+        },
+        "total_run_seconds": 43.79098074999638
+      },
+      {
+        "label": "sweep_04",
+        "lag": 4,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110004,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:31:17.242890+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:32:00.546739+00:00",
+        "sampling_and_preprocessing_seconds": 43.16544829198392,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027977613718553236,
+          "workforce_ratio_max": 0.42173112338858193,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:32:00.253910+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 41.40099382400513,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000439228870692,
+            "sigma": 1.0000636719804847,
+            "alpha": {
+              "Chemistry": 1.0000257763337619,
+              "Economics": 1.0000697501401974,
+              "PhysMed": 1.0000023157205662,
+              "Physics": 1.0000523998310165
+            }
+          },
+          "ess_bulk": {
+            "mu": 24096.418257902096,
+            "sigma": 23301.48902867384,
+            "alpha": {
+              "Chemistry": 77629.20358623954,
+              "Economics": 58801.334190232556,
+              "PhysMed": 109254.44115712238,
+              "Physics": 89220.82198245228
+            }
+          },
+          "ess_tail": {
+            "mu": 25661.290025495317,
+            "sigma": 28018.1756587494,
+            "alpha": {
+              "Chemistry": 67168.0498124652,
+              "Economics": 53443.41629553554,
+              "PhysMed": 84103.52637601757,
+              "Physics": 79917.21935540561
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002984064763155234,
+            "sigma": 0.002517399212234557,
+            "alpha": {
+              "Chemistry": 0.000506461458955482,
+              "Economics": 0.0003201055072358266,
+              "PhysMed": 0.00027485565609575494,
+              "Physics": 0.0003464911342382004
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.3771337796320747,
+            "max": 1.0000000000000004,
+            "mean": 0.9864378419040801
+          },
+          "tree_depth": {
+            "min": 1,
+            "max": 7,
+            "mean": 4.68323
+          },
+          "n_steps": {
+            "min": 1.0,
+            "max": 127.0,
+            "mean": 26.81632
+          },
+          "step_size": {
+            "min": 0.11161329022193335,
+            "max": 0.11935128429972465,
+            "mean": 0.115482287260829
+          },
+          "max_rhat_rank": 1.0000697501401974,
+          "min_ess_bulk": 23301.48902867384,
+          "min_ess_tail": 25661.290025495317,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 236,
+            "count_alpha_ge_1_by_chain": [
+              124,
+              112
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00236,
+            "indicator_ess_mean": 91078.75536199275,
+            "indicator_mcse_mean": 0.000160781677771212
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 2,
+            "count_alpha_ge_1_by_chain": [
+              1,
+              1
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 2e-05,
+            "indicator_ess_mean": 100010.66826689277,
+            "indicator_mcse_mean": 1.4141310615906664e-05
+          },
+          "Physics": {
+            "count_alpha_ge_1": 3,
+            "count_alpha_ge_1_by_chain": [
+              1,
+              2
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 3e-05,
+            "indicator_ess_mean": 100011.5574165729,
+            "indicator_mcse_mean": 1.7319334063133196e-05
+          }
+        },
+        "total_run_seconds": 43.58941808401141
+      },
+      {
+        "label": "sweep_05",
+        "lag": 5,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110005,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:32:00.834174+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:32:43.258712+00:00",
+        "sampling_and_preprocessing_seconds": 42.2845874169725,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027973036111946504,
+          "workforce_ratio_max": 0.4097034629513423,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:32:42.960267+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 40.46351218223572,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0002244187773168,
+            "sigma": 1.0001338338335317,
+            "alpha": {
+              "Chemistry": 1.0000138927826696,
+              "Economics": 1.0000619657025933,
+              "PhysMed": 1.0000262047730852,
+              "Physics": 1.0000303033795606
+            }
+          },
+          "ess_bulk": {
+            "mu": 24538.82756846887,
+            "sigma": 25700.82246453268,
+            "alpha": {
+              "Chemistry": 75042.31900425178,
+              "Economics": 60355.66581492834,
+              "PhysMed": 105308.84764784698,
+              "Physics": 90632.72860876692
+            }
+          },
+          "ess_tail": {
+            "mu": 24580.869332861403,
+            "sigma": 32220.9038079964,
+            "alpha": {
+              "Chemistry": 69895.25441854013,
+              "Economics": 57508.73572974898,
+              "PhysMed": 82182.16653591236,
+              "Physics": 78530.41508809841
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.0028903266795082356,
+            "sigma": 0.002383490684985246,
+            "alpha": {
+              "Chemistry": 0.0005415303619146456,
+              "Economics": 0.00033041748247499816,
+              "PhysMed": 0.0002873168794087663,
+              "Physics": 0.00035357274498007646
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.14463221283857233,
+            "max": 1.0000000000000004,
+            "mean": 0.9846740974422052
+          },
+          "tree_depth": {
+            "min": 1,
+            "max": 7,
+            "mean": 4.69226
+          },
+          "n_steps": {
+            "min": 1.0,
+            "max": 95.0,
+            "mean": 26.90292
+          },
+          "step_size": {
+            "min": 0.10732334838824754,
+            "max": 0.11250132853853692,
+            "mean": 0.10991233846339224
+          },
+          "max_rhat_rank": 1.0002244187773168,
+          "min_ess_bulk": 24538.82756846887,
+          "min_ess_tail": 24580.869332861403,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 363,
+            "count_alpha_ge_1_by_chain": [
+              181,
+              182
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00363,
+            "indicator_ess_mean": 91246.27479822989,
+            "indicator_mcse_mean": 0.00019909402830534822
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 3,
+            "count_alpha_ge_1_by_chain": [
+              2,
+              1
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 3e-05,
+            "indicator_ess_mean": 100013.33578710193,
+            "indicator_mcse_mean": 1.7319180082016795e-05
+          },
+          "Physics": {
+            "count_alpha_ge_1": 5,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              5
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 5e-05,
+            "indicator_ess_mean": 100012.26875337567,
+            "indicator_mcse_mean": 2.2358861017766218e-05
+          }
+        },
+        "total_run_seconds": 42.71023987495573
+      },
+      {
+        "label": "sweep_06",
+        "lag": 6,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110006,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:32:43.546221+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:33:23.689728+00:00",
+        "sampling_and_preprocessing_seconds": 40.001828749955166,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027968840560029178,
+          "workforce_ratio_max": 0.39885796090624615,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:33:23.394656+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 38.360814809799194,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000068953409047,
+            "sigma": 1.0000562927723902,
+            "alpha": {
+              "Chemistry": 1.0000263939129017,
+              "Economics": 0.9999978222720947,
+              "PhysMed": 1.0000052132658768,
+              "Physics": 1.0000158088408009
+            }
+          },
+          "ess_bulk": {
+            "mu": 26311.303222251,
+            "sigma": 21442.09763844742,
+            "alpha": {
+              "Chemistry": 71267.2542531053,
+              "Economics": 59225.52618365578,
+              "PhysMed": 109204.1040571164,
+              "Physics": 98321.94463478409
+            }
+          },
+          "ess_tail": {
+            "mu": 27205.82732456315,
+            "sigma": 23884.624877215512,
+            "alpha": {
+              "Chemistry": 66254.15570003718,
+              "Economics": 51732.49116116082,
+              "PhysMed": 82424.90274736336,
+              "Physics": 82103.32488231134
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002803905817539255,
+            "sigma": 0.0025692878537968795,
+            "alpha": {
+              "Chemistry": 0.0005732915079034708,
+              "Economics": 0.00034616952562042664,
+              "PhysMed": 0.00029685260980456753,
+              "Physics": 0.00035789107251090374
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.4736154668354273,
+            "max": 1.0000000000000004,
+            "mean": 0.9867637421192432
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.60479
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 95.0,
+            "mean": 25.28774
+          },
+          "step_size": {
+            "min": 0.1208358172390752,
+            "max": 0.13659985685958423,
+            "mean": 0.1287178370493297
+          },
+          "max_rhat_rank": 1.0000562927723902,
+          "min_ess_bulk": 21442.09763844742,
+          "min_ess_tail": 23884.624877215512,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 510,
+            "count_alpha_ge_1_by_chain": [
+              252,
+              258
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0051,
+            "indicator_ess_mean": 90587.04815668623,
+            "indicator_mcse_mean": 0.00023667038699195071
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 2,
+            "count_alpha_ge_1_by_chain": [
+              1,
+              1
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 2e-05,
+            "indicator_ess_mean": 100010.66826689277,
+            "indicator_mcse_mean": 1.4141310615906665e-05
+          },
+          "Physics": {
+            "count_alpha_ge_1": 8,
+            "count_alpha_ge_1_by_chain": [
+              4,
+              4
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 8e-05,
+            "indicator_ess_mean": 100020.67256829744,
+            "indicator_mcse_mean": 2.828035828360943e-05
+          }
+        },
+        "total_run_seconds": 40.45352666696999
+      },
+      {
+        "label": "sweep_07",
+        "lag": 7,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110007,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:33:24.002718+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:34:04.876967+00:00",
+        "sampling_and_preprocessing_seconds": 40.73243504203856,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.0279649951821234,
+          "workforce_ratio_max": 0.39885796090624615,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:34:04.581766+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 38.86265182495117,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000758924489588,
+            "sigma": 1.0000323577889214,
+            "alpha": {
+              "Chemistry": 1.0000040623234632,
+              "Economics": 1.0000197973401432,
+              "PhysMed": 0.9999894954578131,
+              "Physics": 0.9999971205714859
+            }
+          },
+          "ess_bulk": {
+            "mu": 22272.326065689685,
+            "sigma": 21193.294391985335,
+            "alpha": {
+              "Chemistry": 73223.28195687309,
+              "Economics": 58165.065970753756,
+              "PhysMed": 105295.35789272448,
+              "Physics": 93789.90044033816
+            }
+          },
+          "ess_tail": {
+            "mu": 24619.725847855898,
+            "sigma": 25088.61992621186,
+            "alpha": {
+              "Chemistry": 66489.73218147672,
+              "Economics": 51544.54238812581,
+              "PhysMed": 80473.3191521075,
+              "Physics": 78358.87758129904
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.003046781911610008,
+            "sigma": 0.0025992132124082272,
+            "alpha": {
+              "Chemistry": 0.0005896791275017808,
+              "Economics": 0.0003621400226159078,
+              "PhysMed": 0.00031475764814537974,
+              "Physics": 0.0003765223717120535
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.4666063954704692,
+            "max": 1.0000000000000004,
+            "mean": 0.988083825561623
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.63768
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 95.0,
+            "mean": 25.8812
+          },
+          "step_size": {
+            "min": 0.13415185421287504,
+            "max": 0.13601826363081923,
+            "mean": 0.13508505892184713
+          },
+          "max_rhat_rank": 1.0000758924489588,
+          "min_ess_bulk": 21193.294391985335,
+          "min_ess_tail": 24619.725847855898,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 679,
+            "count_alpha_ge_1_by_chain": [
+              338,
+              341
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00679,
+            "indicator_ess_mean": 90530.08915092176,
+            "indicator_mcse_mean": 0.00027293619098214193
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 4,
+            "count_alpha_ge_1_by_chain": [
+              3,
+              1
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 4e-05,
+            "indicator_ess_mean": 100014.66962724009,
+            "indicator_mcse_mean": 1.9998233215407032e-05
+          },
+          "Physics": {
+            "count_alpha_ge_1": 9,
+            "count_alpha_ge_1_by_chain": [
+              3,
+              6
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 9e-05,
+            "indicator_ess_mean": 100022.82203218182,
+            "indicator_mcse_mean": 2.9995377381923413e-05
+          }
+        },
+        "total_run_seconds": 41.16991754202172
+      },
+      {
+        "label": "sweep_08",
+        "lag": 8,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110008,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:34:05.175534+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:34:47.803356+00:00",
+        "sampling_and_preprocessing_seconds": 42.44642304198351,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.02796147075684588,
+          "workforce_ratio_max": 0.3925619834710744,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:34:47.509781+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 40.70586800575256,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0001509444451808,
+            "sigma": 1.0000739776617806,
+            "alpha": {
+              "Chemistry": 1.0000010456490322,
+              "Economics": 1.0000819624548807,
+              "PhysMed": 1.0000184163505237,
+              "Physics": 1.000049930242341
+            }
+          },
+          "ess_bulk": {
+            "mu": 28110.76569302061,
+            "sigma": 22835.66334981955,
+            "alpha": {
+              "Chemistry": 76326.45071145544,
+              "Economics": 58027.84476234998,
+              "PhysMed": 110259.6697713233,
+              "Physics": 86907.81070214398
+            }
+          },
+          "ess_tail": {
+            "mu": 28257.50848448135,
+            "sigma": 26586.815223227735,
+            "alpha": {
+              "Chemistry": 68767.77733914812,
+              "Economics": 51960.59978569123,
+              "PhysMed": 84410.89701797401,
+              "Physics": 77778.04788425764
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002681302121110814,
+            "sigma": 0.002485200876755123,
+            "alpha": {
+              "Chemistry": 0.0005946669375803174,
+              "Economics": 0.00037738155367537127,
+              "PhysMed": 0.00032100958687495697,
+              "Physics": 0.00040575349143652127
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.30189324805129286,
+            "max": 1.0000000000000004,
+            "mean": 0.9879097213765317
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.68206
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 95.0,
+            "mean": 26.65484
+          },
+          "step_size": {
+            "min": 0.11337820229650367,
+            "max": 0.12224580770552794,
+            "mean": 0.11781200500101582
+          },
+          "max_rhat_rank": 1.0001509444451808,
+          "min_ess_bulk": 22835.66334981955,
+          "min_ess_tail": 26586.815223227735,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 933,
+            "count_alpha_ge_1_by_chain": [
+              489,
+              444
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00933,
+            "indicator_ess_mean": 94132.097435791,
+            "indicator_mcse_mean": 0.0003133564448626094
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 4,
+            "count_alpha_ge_1_by_chain": [
+              2,
+              2
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 4e-05,
+            "indicator_ess_mean": 100014.66962724009,
+            "indicator_mcse_mean": 1.9998233215407032e-05
+          },
+          "Physics": {
+            "count_alpha_ge_1": 17,
+            "count_alpha_ge_1_by_chain": [
+              7,
+              10
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00017,
+            "indicator_ess_mean": 100038.13824769469,
+            "indicator_mcse_mean": 4.1219898082622985e-05
+          }
+        },
+        "total_run_seconds": 42.8797990839812
+      },
+      {
+        "label": "sweep_09",
+        "lag": 9,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110009,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:34:48.097449+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:35:29.380459+00:00",
+        "sampling_and_preprocessing_seconds": 41.138622500002384,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027958240500445358,
+          "workforce_ratio_max": 0.38832997987927564,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:35:29.074783+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 39.29219603538513,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "energy_error",
+            "reached_max_treedepth",
+            "lp",
+            "step_size_bar",
+            "energy",
+            "index_in_trajectory",
+            "perf_counter_start",
+            "max_energy_error",
+            "largest_eigval",
+            "n_steps",
+            "perf_counter_diff",
+            "acceptance_rate",
+            "diverging",
+            "process_time_diff",
+            "smallest_eigval",
+            "step_size",
+            "divergences",
+            "tree_depth"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.000070630385025,
+            "sigma": 1.0000167286528534,
+            "alpha": {
+              "Chemistry": 1.000052815734921,
+              "Economics": 1.0000454348770489,
+              "PhysMed": 1.0000686423050298,
+              "Physics": 1.000012353533116
+            }
+          },
+          "ess_bulk": {
+            "mu": 26419.367060834178,
+            "sigma": 19746.544997713583,
+            "alpha": {
+              "Chemistry": 77957.07432379932,
+              "Economics": 53511.38680758875,
+              "PhysMed": 104024.20594349423,
+              "Physics": 88518.55334631178
+            }
+          },
+          "ess_tail": {
+            "mu": 27915.037987414908,
+            "sigma": 22114.523333007306,
+            "alpha": {
+              "Chemistry": 71218.88376172406,
+              "Economics": 50986.42393597743,
+              "PhysMed": 82451.11594591368,
+              "Physics": 74821.7524104512
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002776743642123889,
+            "sigma": 0.0026627924640724773,
+            "alpha": {
+              "Chemistry": 0.0006227006465461513,
+              "Economics": 0.00040544598437166593,
+              "PhysMed": 0.0003425481328719063,
+              "Physics": 0.0004128735559025997
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.34329645328250374,
+            "max": 1.0000000000000004,
+            "mean": 0.985635481668644
+          },
+          "tree_depth": {
+            "min": 1,
+            "max": 7,
+            "mean": 4.53712
+          },
+          "n_steps": {
+            "min": 1.0,
+            "max": 95.0,
+            "mean": 24.11604
+          },
+          "step_size": {
+            "min": 0.1365023094704435,
+            "max": 0.14095201409802294,
+            "mean": 0.13872716178423325
+          },
+          "max_rhat_rank": 1.000070630385025,
+          "min_ess_bulk": 19746.544997713583,
+          "min_ess_tail": 22114.523333007306,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 1346,
+            "count_alpha_ge_1_by_chain": [
+              662,
+              684
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.01346,
+            "indicator_ess_mean": 89751.84231144378,
+            "indicator_mcse_mean": 0.0003846452421328934
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 11,
+            "count_alpha_ge_1_by_chain": [
+              6,
+              5
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00011,
+            "indicator_ess_mean": 100029.83065110096,
+            "indicator_mcse_mean": 3.315964403304713e-05
+          },
+          "Physics": {
+            "count_alpha_ge_1": 28,
+            "count_alpha_ge_1_by_chain": [
+              12,
+              16
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00028,
+            "indicator_ess_mean": 100056.04515618905,
+            "indicator_mcse_mean": 5.2893062215558534e-05
+          }
+        },
+        "total_run_seconds": 41.56852083298145
+      },
+      {
+        "label": "sweep_10",
+        "lag": 10,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110010,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:35:52.201750+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:36:36.774683+00:00",
+        "sampling_and_preprocessing_seconds": 44.43208262504777,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027955279863590903,
+          "workforce_ratio_max": 0.38832997987927564,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:36:36.473396+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 42.34258198738098,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000787953010326,
+            "sigma": 1.000019974860383,
+            "alpha": {
+              "Chemistry": 1.0000059205046585,
+              "Economics": 1.0000187416494783,
+              "PhysMed": 1.0000176625684947,
+              "Physics": 1.000035650045765
+            }
+          },
+          "ess_bulk": {
+            "mu": 26246.45360073263,
+            "sigma": 21394.06182641623,
+            "alpha": {
+              "Chemistry": 72425.03029664168,
+              "Economics": 56299.80982705715,
+              "PhysMed": 104076.6515215766,
+              "Physics": 92039.6784861914
+            }
+          },
+          "ess_tail": {
+            "mu": 28535.02917758521,
+            "sigma": 23628.389799310902,
+            "alpha": {
+              "Chemistry": 68118.01027250053,
+              "Economics": 53076.71824439081,
+              "PhysMed": 82259.13099193633,
+              "Physics": 77606.4599590774
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002765796633112435,
+            "sigma": 0.0025686525667524595,
+            "alpha": {
+              "Chemistry": 0.0006662590143576274,
+              "Economics": 0.00041027934720859623,
+              "PhysMed": 0.00035551831696039725,
+              "Physics": 0.00042597088356263225
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.5836468853421117,
+            "max": 1.0000000000000004,
+            "mean": 0.9897912139360444
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.75226
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 28.11616
+          },
+          "step_size": {
+            "min": 0.11043449996416305,
+            "max": 0.11922773829036692,
+            "mean": 0.11483111912726501
+          },
+          "max_rhat_rank": 1.0000787953010326,
+          "min_ess_bulk": 21394.06182641623,
+          "min_ess_tail": 23628.389799310902,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 1738,
+            "count_alpha_ge_1_by_chain": [
+              867,
+              871
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.01738,
+            "indicator_ess_mean": 92324.0135354336,
+            "indicator_mcse_mean": 0.0004300931436142914
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 24,
+            "count_alpha_ge_1_by_chain": [
+              17,
+              7
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00024,
+            "indicator_ess_mean": 100052.26138994045,
+            "indicator_mcse_mean": 4.897136576219556e-05
+          },
+          "Physics": {
+            "count_alpha_ge_1": 55,
+            "count_alpha_ge_1_by_chain": [
+              28,
+              27
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00055,
+            "indicator_ess_mean": 90442.90172173244,
+            "indicator_mcse_mean": 7.796089363270481e-05
+          }
+        },
+        "total_run_seconds": 44.85738737502834
+      },
+      {
+        "label": "sweep_11",
+        "lag": 11,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110011,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:36:37.064464+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:37:21.779517+00:00",
+        "sampling_and_preprocessing_seconds": 44.56962008296978,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027952566345079376,
+          "workforce_ratio_max": 0.3732750787318665,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:37:21.466553+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 42.710988998413086,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000391055239413,
+            "sigma": 1.0001190204778714,
+            "alpha": {
+              "Chemistry": 1.0000116388634783,
+              "Economics": 1.0000298096217795,
+              "PhysMed": 1.0000001456544805,
+              "Physics": 1.000033266209167
+            }
+          },
+          "ess_bulk": {
+            "mu": 27483.188803961955,
+            "sigma": 18565.31242744251,
+            "alpha": {
+              "Chemistry": 68661.88717149866,
+              "Economics": 48138.78731145513,
+              "PhysMed": 111774.80335666954,
+              "Physics": 96182.57508488132
+            }
+          },
+          "ess_tail": {
+            "mu": 29082.683334567108,
+            "sigma": 20815.30711915991,
+            "alpha": {
+              "Chemistry": 66535.13322327293,
+              "Economics": 47797.118673930134,
+              "PhysMed": 82096.15036232164,
+              "Physics": 77095.90090647762
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002691514846382814,
+            "sigma": 0.0027487699226655137,
+            "alpha": {
+              "Chemistry": 0.0007139659035055743,
+              "Economics": 0.0004634241587949326,
+              "PhysMed": 0.00035702325776579985,
+              "Physics": 0.0004345806094895632
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.5356357385919047,
+            "max": 1.0000000000000004,
+            "mean": 0.988952062021741
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.71667
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 27.40138
+          },
+          "step_size": {
+            "min": 0.1200429361778915,
+            "max": 0.12646773702466807,
+            "mean": 0.1232553366012798
+          },
+          "max_rhat_rank": 1.0001190204778714,
+          "min_ess_bulk": 18565.31242744251,
+          "min_ess_tail": 20815.30711915991,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 2442,
+            "count_alpha_ge_1_by_chain": [
+              1197,
+              1245
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.02442,
+            "indicator_ess_mean": 90437.36216027745,
+            "indicator_mcse_mean": 0.0005132541885467009
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 37,
+            "count_alpha_ge_1_by_chain": [
+              21,
+              16
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00037,
+            "indicator_ess_mean": 100080.59892934542,
+            "indicator_mcse_mean": 6.079218124620627e-05
+          },
+          "Physics": {
+            "count_alpha_ge_1": 69,
+            "count_alpha_ge_1_by_chain": [
+              33,
+              36
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00069,
+            "indicator_ess_mean": 92616.26980472032,
+            "indicator_mcse_mean": 8.628458026811641e-05
+          }
+        },
+        "total_run_seconds": 45.00554074998945
+      },
+      {
+        "label": "sweep_12",
+        "lag": 12,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110012,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:37:22.074346+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:38:05.779801+00:00",
+        "sampling_and_preprocessing_seconds": 43.566176625026856,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027950079321056757,
+          "workforce_ratio_max": 0.35852310231799034,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:38:05.490912+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 41.73376774787903,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000429072164252,
+            "sigma": 1.0001097365612186,
+            "alpha": {
+              "Chemistry": 1.0000574882993638,
+              "Economics": 1.000021858200085,
+              "PhysMed": 0.9999874209289057,
+              "Physics": 1.0000381351570393
+            }
+          },
+          "ess_bulk": {
+            "mu": 31934.638577490838,
+            "sigma": 19676.977324152995,
+            "alpha": {
+              "Chemistry": 71313.80229797153,
+              "Economics": 52023.95990113869,
+              "PhysMed": 110660.02748573937,
+              "Physics": 90083.28477853832
+            }
+          },
+          "ess_tail": {
+            "mu": 32954.50660625379,
+            "sigma": 21657.976994906145,
+            "alpha": {
+              "Chemistry": 67795.65200094109,
+              "Economics": 48610.93287776173,
+              "PhysMed": 81303.45274031423,
+              "Physics": 76665.65613024095
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002428103347619201,
+            "sigma": 0.0026588844959265015,
+            "alpha": {
+              "Chemistry": 0.0007342454099442943,
+              "Economics": 0.00046594053548339756,
+              "PhysMed": 0.00037004003997872105,
+              "Physics": 0.0004642666923672903
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.6229360593313651,
+            "max": 1.0000000000000004,
+            "mean": 0.9883438026554086
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.69627
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 26.94238
+          },
+          "step_size": {
+            "min": 0.11975943047503697,
+            "max": 0.12346374120230935,
+            "mean": 0.12161158583867317
+          },
+          "max_rhat_rank": 1.0001097365612186,
+          "min_ess_bulk": 19676.977324152995,
+          "min_ess_tail": 21657.976994906145,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 3155,
+            "count_alpha_ge_1_by_chain": [
+              1581,
+              1574
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.03155,
+            "indicator_ess_mean": 91700.64170828136,
+            "indicator_mcse_mean": 0.0005772371418103265
+          },
+          "Economics": {
+            "count_alpha_ge_1": 0,
+            "count_alpha_ge_1_by_chain": [
+              0,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0,
+            "indicator_diagnostics_unavailable": "All threshold indicators identical; no observed tail events does not imply zero posterior probability."
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 63,
+            "count_alpha_ge_1_by_chain": [
+              32,
+              31
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00063,
+            "indicator_ess_mean": 97046.8154760889,
+            "indicator_mcse_mean": 8.05461814079768e-05
+          },
+          "Physics": {
+            "count_alpha_ge_1": 92,
+            "count_alpha_ge_1_by_chain": [
+              38,
+              54
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00092,
+            "indicator_ess_mean": 90652.31904614311,
+            "indicator_mcse_mean": 0.00010069473387387514
+          }
+        },
+        "total_run_seconds": 43.99287399998866
+      },
+      {
+        "label": "sweep_13",
+        "lag": 13,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110013,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:38:06.069744+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:38:49.478652+00:00",
+        "sampling_and_preprocessing_seconds": 43.2687106669764,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027947799888464367,
+          "workforce_ratio_max": 0.35852310231799034,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:38:49.192063+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 41.45049691200256,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000356983321697,
+            "sigma": 1.0000688988419288,
+            "alpha": {
+              "Chemistry": 0.9999990834981222,
+              "Economics": 1.0000536379398086,
+              "PhysMed": 0.9999952367613161,
+              "Physics": 1.0000379543979898
+            }
+          },
+          "ess_bulk": {
+            "mu": 27368.792526956575,
+            "sigma": 20727.655454012467,
+            "alpha": {
+              "Chemistry": 69331.1762003684,
+              "Economics": 53227.248927350964,
+              "PhysMed": 107825.90890147326,
+              "Physics": 91636.3087692807
+            }
+          },
+          "ess_tail": {
+            "mu": 29037.24521384569,
+            "sigma": 23358.999833303613,
+            "alpha": {
+              "Chemistry": 66415.54771305603,
+              "Economics": 49636.50448546595,
+              "PhysMed": 81671.67013823817,
+              "Physics": 77679.01684018344
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002681907297649262,
+            "sigma": 0.0026061581595702146,
+            "alpha": {
+              "Chemistry": 0.0007643644410816491,
+              "Economics": 0.00047418152806908,
+              "PhysMed": 0.000394196669791024,
+              "Physics": 0.0004808736600306706
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.5856348513743094,
+            "max": 1.0000000000000004,
+            "mean": 0.9891819763566647
+          },
+          "tree_depth": {
+            "min": 1,
+            "max": 7,
+            "mean": 4.71176
+          },
+          "n_steps": {
+            "min": 1.0,
+            "max": 127.0,
+            "mean": 27.2567
+          },
+          "step_size": {
+            "min": 0.13268850248641106,
+            "max": 0.1441877504281099,
+            "mean": 0.1384381264572605
+          },
+          "max_rhat_rank": 1.0000688988419288,
+          "min_ess_bulk": 20727.655454012467,
+          "min_ess_tail": 23358.999833303613,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 4044,
+            "count_alpha_ge_1_by_chain": [
+              2013,
+              2031
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.04044,
+            "indicator_ess_mean": 91207.33922141767,
+            "indicator_mcse_mean": 0.0006522722758433235
+          },
+          "Economics": {
+            "count_alpha_ge_1": 1,
+            "count_alpha_ge_1_by_chain": [
+              1,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 1e-05,
+            "indicator_ess_mean": 100008.0009601024,
+            "indicator_mcse_mean": 9.999599975999042e-06
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 139,
+            "count_alpha_ge_1_by_chain": [
+              77,
+              62
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00139,
+            "indicator_ess_mean": 95315.28592701917,
+            "indicator_mcse_mean": 0.00012067748468429782
+          },
+          "Physics": {
+            "count_alpha_ge_1": 156,
+            "count_alpha_ge_1_by_chain": [
+              72,
+              84
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00156,
+            "indicator_ess_mean": 88854.04751268959,
+            "indicator_mcse_mean": 0.0001323996535223659
+          }
+        },
+        "total_run_seconds": 43.70542683301028
+      },
+      {
+        "label": "sweep_14",
+        "lag": 14,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110014,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:38:49.777650+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:39:29.078212+00:00",
+        "sampling_and_preprocessing_seconds": 39.158800292003434,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.02794571072152747,
+          "workforce_ratio_max": 0.3506743509614999,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:39:28.779473+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 37.367002964019775,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000839902500236,
+            "sigma": 1.0001480585767386,
+            "alpha": {
+              "Chemistry": 1.0000332095139173,
+              "Economics": 1.0000544665872622,
+              "PhysMed": 0.9999958690239021,
+              "Physics": 1.0000305074765345
+            }
+          },
+          "ess_bulk": {
+            "mu": 24706.333832680386,
+            "sigma": 22928.10825487369,
+            "alpha": {
+              "Chemistry": 72152.65718395718,
+              "Economics": 56630.25423292156,
+              "PhysMed": 110955.04409931986,
+              "Physics": 98445.52875958891
+            }
+          },
+          "ess_tail": {
+            "mu": 26447.771040623746,
+            "sigma": 25217.684360619667,
+            "alpha": {
+              "Chemistry": 67287.86789778217,
+              "Economics": 51763.664360911665,
+              "PhysMed": 81536.20551597848,
+              "Physics": 77804.11974816602
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.0027728639327434957,
+            "sigma": 0.002454343836028062,
+            "alpha": {
+              "Chemistry": 0.0007892738830258075,
+              "Economics": 0.0004819202571955064,
+              "PhysMed": 0.00040611927967847003,
+              "Physics": 0.00048292086831105437
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.48664473053157703,
+            "max": 1.0000000000000004,
+            "mean": 0.984808820257013
+          },
+          "tree_depth": {
+            "min": 1,
+            "max": 7,
+            "mean": 4.50502
+          },
+          "n_steps": {
+            "min": 1.0,
+            "max": 127.0,
+            "mean": 23.59648
+          },
+          "step_size": {
+            "min": 0.13128413336518902,
+            "max": 0.1373380076703416,
+            "mean": 0.13431107051776534
+          },
+          "max_rhat_rank": 1.0001480585767386,
+          "min_ess_bulk": 22928.10825487369,
+          "min_ess_tail": 25217.684360619667,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 5274,
+            "count_alpha_ge_1_by_chain": [
+              2629,
+              2645
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.05274,
+            "indicator_ess_mean": 90783.69189620158,
+            "indicator_mcse_mean": 0.0007418274737228442
+          },
+          "Economics": {
+            "count_alpha_ge_1": 1,
+            "count_alpha_ge_1_by_chain": [
+              1,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 1e-05,
+            "indicator_ess_mean": 100008.0009601024,
+            "indicator_mcse_mean": 9.99959997599904e-06
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 207,
+            "count_alpha_ge_1_by_chain": [
+              110,
+              97
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00207,
+            "indicator_ess_mean": 95538.81709086221,
+            "indicator_mcse_mean": 0.00014704404924898552
+          },
+          "Physics": {
+            "count_alpha_ge_1": 191,
+            "count_alpha_ge_1_by_chain": [
+              92,
+              99
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00191,
+            "indicator_ess_mean": 88694.7170330533,
+            "indicator_mcse_mean": 0.00014660704189437034
+          }
+        },
+        "total_run_seconds": 39.58580541698029
+      },
+      {
+        "label": "sweep_15",
+        "lag": 15,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110015,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:39:29.373276+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:40:14.890714+00:00",
+        "sampling_and_preprocessing_seconds": 45.376567791972775,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027943795940201802,
+          "workforce_ratio_max": 0.3432203389830508,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:40:14.597382+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 43.7298481464386,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.000137406850277,
+            "sigma": 1.0000840671303868,
+            "alpha": {
+              "Chemistry": 1.0000320500399247,
+              "Economics": 1.0000014500127818,
+              "PhysMed": 1.0000117047940824,
+              "Physics": 1.0000411615022886
+            }
+          },
+          "ess_bulk": {
+            "mu": 27542.245950155768,
+            "sigma": 21624.92490129652,
+            "alpha": {
+              "Chemistry": 68439.31978797578,
+              "Economics": 54670.7574058604,
+              "PhysMed": 105009.97762356367,
+              "Physics": 92061.12359695879
+            }
+          },
+          "ess_tail": {
+            "mu": 29202.443261980043,
+            "sigma": 23694.845318644726,
+            "alpha": {
+              "Chemistry": 64282.887668423165,
+              "Economics": 51390.74231770835,
+              "PhysMed": 81009.80400211153,
+              "Physics": 78533.72011444709
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002638197608406979,
+            "sigma": 0.0025325122067335073,
+            "alpha": {
+              "Chemistry": 0.000826500799661151,
+              "Economics": 0.0005127788783710884,
+              "PhysMed": 0.00043608425572645113,
+              "Physics": 0.0005117136102796517
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.5347847731199895,
+            "max": 1.0000000000000004,
+            "mean": 0.9897781163993602
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.76451
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 28.35622
+          },
+          "step_size": {
+            "min": 0.11039444346465901,
+            "max": 0.12910932439597286,
+            "mean": 0.11975188393031594
+          },
+          "max_rhat_rank": 1.000137406850277,
+          "min_ess_bulk": 21624.92490129652,
+          "min_ess_tail": 23694.845318644726,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 6304,
+            "count_alpha_ge_1_by_chain": [
+              3229,
+              3075
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.06304,
+            "indicator_ess_mean": 89877.59173647666,
+            "indicator_mcse_mean": 0.0008106718366651312
+          },
+          "Economics": {
+            "count_alpha_ge_1": 2,
+            "count_alpha_ge_1_by_chain": [
+              1,
+              1
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 2e-05,
+            "indicator_ess_mean": 100010.66826689277,
+            "indicator_mcse_mean": 1.4141310615906665e-05
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 380,
+            "count_alpha_ge_1_by_chain": [
+              201,
+              179
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0038,
+            "indicator_ess_mean": 97520.73980459606,
+            "indicator_mcse_mean": 0.0001970238244141132
+          },
+          "Physics": {
+            "count_alpha_ge_1": 301,
+            "count_alpha_ge_1_by_chain": [
+              157,
+              144
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00301,
+            "indicator_ess_mean": 95390.37051243878,
+            "indicator_mcse_mean": 0.0001773693410578651
+          }
+        },
+        "total_run_seconds": 45.80735845898744
+      },
+      {
+        "label": "sweep_16",
+        "lag": 16,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110016,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:40:15.183326+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:40:59.254852+00:00",
+        "sampling_and_preprocessing_seconds": 43.930436499998905,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.02794204098958335,
+          "workforce_ratio_max": 0.3340904849561869,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:40:58.962266+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 42.04219603538513,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000878761171945,
+            "sigma": 1.0000661004981348,
+            "alpha": {
+              "Chemistry": 1.0000266997721863,
+              "Economics": 1.000014072057292,
+              "PhysMed": 1.0000285638853605,
+              "Physics": 1.0000120884864132
+            }
+          },
+          "ess_bulk": {
+            "mu": 26343.578630099764,
+            "sigma": 21093.420916738636,
+            "alpha": {
+              "Chemistry": 77033.24925357144,
+              "Economics": 53750.685860517406,
+              "PhysMed": 106128.96241930609,
+              "Physics": 88560.72642171857
+            }
+          },
+          "ess_tail": {
+            "mu": 29612.20636348494,
+            "sigma": 22915.352087115672,
+            "alpha": {
+              "Chemistry": 70297.89262490792,
+              "Economics": 50219.587350281836,
+              "PhysMed": 80982.83881960905,
+              "Physics": 78255.15017225579
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.0026677234441980714,
+            "sigma": 0.0025543771858080387,
+            "alpha": {
+              "Chemistry": 0.0008158447403314529,
+              "Economics": 0.0005364273606111212,
+              "PhysMed": 0.0004545522039561569,
+              "Physics": 0.0005420333135695412
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.5708805617449162,
+            "max": 1.0000000000000004,
+            "mean": 0.989985222609102
+          },
+          "tree_depth": {
+            "min": 1,
+            "max": 7,
+            "mean": 4.74307
+          },
+          "n_steps": {
+            "min": 1.0,
+            "max": 127.0,
+            "mean": 27.8143
+          },
+          "step_size": {
+            "min": 0.1286064900373436,
+            "max": 0.13716773295662477,
+            "mean": 0.13288711149698418
+          },
+          "max_rhat_rank": 1.0000878761171945,
+          "min_ess_bulk": 21093.420916738636,
+          "min_ess_tail": 22915.352087115672,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 7694,
+            "count_alpha_ge_1_by_chain": [
+              3885,
+              3809
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.07694,
+            "indicator_ess_mean": 93356.6696367708,
+            "indicator_mcse_mean": 0.0008722089785930396
+          },
+          "Economics": {
+            "count_alpha_ge_1": 1,
+            "count_alpha_ge_1_by_chain": [
+              1,
+              0
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 1e-05,
+            "indicator_ess_mean": 100008.0009601024,
+            "indicator_mcse_mean": 9.99959997599904e-06
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 573,
+            "count_alpha_ge_1_by_chain": [
+              278,
+              295
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00573,
+            "indicator_ess_mean": 89524.2785669512,
+            "indicator_mcse_mean": 0.00025226746052231817
+          },
+          "Physics": {
+            "count_alpha_ge_1": 355,
+            "count_alpha_ge_1_by_chain": [
+              182,
+              173
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00355,
+            "indicator_ess_mean": 90215.59052497734,
+            "indicator_mcse_mean": 0.00019801737801668573
+          }
+        },
+        "total_run_seconds": 44.360623875050806
+      },
+      {
+        "label": "sweep_17",
+        "lag": 17,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110017,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:40:59.548331+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:41:39.887830+00:00",
+        "sampling_and_preprocessing_seconds": 40.1944171669893,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.02794043252936914,
+          "workforce_ratio_max": 0.32589285714285715,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:41:39.582356+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 38.3729989528656,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000419485643612,
+            "sigma": 1.0000014546990983,
+            "alpha": {
+              "Chemistry": 1.0000161273741772,
+              "Economics": 1.0000283682885795,
+              "PhysMed": 1.0000099538615388,
+              "Physics": 1.000021305099503
+            }
+          },
+          "ess_bulk": {
+            "mu": 28788.81893329184,
+            "sigma": 26543.14059993979,
+            "alpha": {
+              "Chemistry": 79729.98903170752,
+              "Economics": 64030.411047833964,
+              "PhysMed": 109628.40651820088,
+              "Physics": 86361.5193963023
+            }
+          },
+          "ess_tail": {
+            "mu": 30630.51389312623,
+            "sigma": 29324.600516973715,
+            "alpha": {
+              "Chemistry": 70878.5647229897,
+              "Economics": 57945.60253819218,
+              "PhysMed": 84583.33517231575,
+              "Physics": 78484.76716547317
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.0025812354155650926,
+            "sigma": 0.002281303734124177,
+            "alpha": {
+              "Chemistry": 0.0008392993310947,
+              "Economics": 0.0005147371280013051,
+              "PhysMed": 0.00046797943696808795,
+              "Physics": 0.0005746491261273792
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.13611246449757256,
+            "max": 1.0000000000000004,
+            "mean": 0.9852007756682142
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.60423
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 95.0,
+            "mean": 25.22708
+          },
+          "step_size": {
+            "min": 0.11699350359774051,
+            "max": 0.12792439901505911,
+            "mean": 0.12245895130639983
+          },
+          "max_rhat_rank": 1.0000419485643612,
+          "min_ess_bulk": 26543.14059993979,
+          "min_ess_tail": 29324.600516973715,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 9634,
+            "count_alpha_ge_1_by_chain": [
+              4835,
+              4799
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.09634,
+            "indicator_ess_mean": 93796.82673888038,
+            "indicator_mcse_mean": 0.0009634162093075238
+          },
+          "Economics": {
+            "count_alpha_ge_1": 5,
+            "count_alpha_ge_1_by_chain": [
+              2,
+              3
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 5e-05,
+            "indicator_ess_mean": 100014.40285492806,
+            "indicator_mcse_mean": 2.235862247045109e-05
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 979,
+            "count_alpha_ge_1_by_chain": [
+              497,
+              482
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00979,
+            "indicator_ess_mean": 93419.33415002696,
+            "indicator_mcse_mean": 0.0003221356483264074
+          },
+          "Physics": {
+            "count_alpha_ge_1": 547,
+            "count_alpha_ge_1_by_chain": [
+              259,
+              288
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00547,
+            "indicator_ess_mean": 89774.27338431193,
+            "indicator_mcse_mean": 0.0002461664311189488
+          }
+        },
+        "total_run_seconds": 40.63106729200808
+      },
+      {
+        "label": "sweep_18",
+        "lag": 18,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110018,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:41:40.181942+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:42:25.619827+00:00",
+        "sampling_and_preprocessing_seconds": 45.292528334015515,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027938958332532546,
+          "workforce_ratio_max": 0.31644198583929295,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:42:25.324236+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 43.38896322250366,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000649380463063,
+            "sigma": 1.0001505696763267,
+            "alpha": {
+              "Chemistry": 0.9999985748651605,
+              "Economics": 1.0001069888273797,
+              "PhysMed": 1.000010551514494,
+              "Physics": 0.9999855313369329
+            }
+          },
+          "ess_bulk": {
+            "mu": 27194.14983755409,
+            "sigma": 18838.656575837816,
+            "alpha": {
+              "Chemistry": 71323.57657456308,
+              "Economics": 51074.50490980538,
+              "PhysMed": 108027.79534396977,
+              "Physics": 99199.99606809816
+            }
+          },
+          "ess_tail": {
+            "mu": 28535.95299143709,
+            "sigma": 20984.397295639363,
+            "alpha": {
+              "Chemistry": 66441.04610561696,
+              "Economics": 50931.64614079214,
+              "PhysMed": 79549.92694599702,
+              "Physics": 78509.62687385615
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.002636834977675586,
+            "sigma": 0.002706508665917369,
+            "alpha": {
+              "Chemistry": 0.0009168954530293592,
+              "Economics": 0.0005963281825006748,
+              "PhysMed": 0.0004870037696088014,
+              "Physics": 0.0005559115416193625
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.6500239657742564,
+            "max": 1.0000000000000004,
+            "mean": 0.9899992189068133
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.72634
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 27.60958
+          },
+          "step_size": {
+            "min": 0.13276874501346206,
+            "max": 0.1587690451052203,
+            "mean": 0.14576889505934118
+          },
+          "max_rhat_rank": 1.0001505696763267,
+          "min_ess_bulk": 18838.656575837816,
+          "min_ess_tail": 20984.397295639363,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 11355,
+            "count_alpha_ge_1_by_chain": [
+              5702,
+              5653
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.11355,
+            "indicator_ess_mean": 92946.83776049153,
+            "indicator_mcse_mean": 0.0010406520726631036
+          },
+          "Economics": {
+            "count_alpha_ge_1": 11,
+            "count_alpha_ge_1_by_chain": [
+              4,
+              7
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00011,
+            "indicator_ess_mean": 100028.8601390766,
+            "indicator_mcse_mean": 3.315980489539801e-05
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 1379,
+            "count_alpha_ge_1_by_chain": [
+              713,
+              666
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.01379,
+            "indicator_ess_mean": 90928.15448509311,
+            "indicator_mcse_mean": 0.00038674064502990617
+          },
+          "Physics": {
+            "count_alpha_ge_1": 709,
+            "count_alpha_ge_1_by_chain": [
+              346,
+              363
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00709,
+            "indicator_ess_mean": 89172.40999754966,
+            "indicator_mcse_mean": 0.00028097325283024096
+          }
+        },
+        "total_run_seconds": 45.72555570903933
+      },
+      {
+        "label": "sweep_19",
+        "lag": 19,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110019,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:42:25.910052+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:43:09.115267+00:00",
+        "sampling_and_preprocessing_seconds": 43.0608085829881,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027937607192446014,
+          "workforce_ratio_max": 0.30434782608695654,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:43:08.823712+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 41.426811933517456,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "perf_counter_diff",
+            "smallest_eigval",
+            "n_steps",
+            "perf_counter_start",
+            "diverging",
+            "energy",
+            "step_size",
+            "reached_max_treedepth",
+            "step_size_bar",
+            "process_time_diff",
+            "acceptance_rate",
+            "divergences",
+            "max_energy_error",
+            "energy_error",
+            "index_in_trajectory",
+            "tree_depth",
+            "largest_eigval",
+            "lp"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0000293269991114,
+            "sigma": 1.0000501719795962,
+            "alpha": {
+              "Chemistry": 1.0000457586061888,
+              "Economics": 1.0000480459658307,
+              "PhysMed": 1.0000380422395472,
+              "Physics": 1.0000165312372562
+            }
+          },
+          "ess_bulk": {
+            "mu": 26027.215758108952,
+            "sigma": 30704.495104550522,
+            "alpha": {
+              "Chemistry": 76853.12581474916,
+              "Economics": 66576.67711559609,
+              "PhysMed": 108329.69964531511,
+              "Physics": 87022.37800300556
+            }
+          },
+          "ess_tail": {
+            "mu": 31270.264798281536,
+            "sigma": 34542.286400206016,
+            "alpha": {
+              "Chemistry": 68897.18641569173,
+              "Economics": 61086.08568479666,
+              "PhysMed": 80711.56187122034,
+              "Physics": 78377.64536507783
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.00263367848630886,
+            "sigma": 0.002114137481170987,
+            "alpha": {
+              "Chemistry": 0.0009043231410292173,
+              "Economics": 0.0005440622665921672,
+              "PhysMed": 0.0005108595892816853,
+              "Physics": 0.0006133136588008566
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.05099342711187644,
+            "max": 1.0000000000000004,
+            "mean": 0.9844403394897224
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.7836
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 28.6388
+          },
+          "step_size": {
+            "min": 0.08162754284472894,
+            "max": 0.11405980478984595,
+            "mean": 0.09784367381728745
+          },
+          "max_rhat_rank": 1.0000501719795962,
+          "min_ess_bulk": 26027.215758108952,
+          "min_ess_tail": 31270.264798281536,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 13309,
+            "count_alpha_ge_1_by_chain": [
+              6587,
+              6722
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.13309,
+            "indicator_ess_mean": 97302.76123902724,
+            "indicator_mcse_mean": 0.001088928358150076
+          },
+          "Economics": {
+            "count_alpha_ge_1": 10,
+            "count_alpha_ge_1_by_chain": [
+              5,
+              5
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0001,
+            "indicator_ess_mean": 83350.56094608974,
+            "indicator_mcse_mean": 3.463587727911211e-05
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 2121,
+            "count_alpha_ge_1_by_chain": [
+              1044,
+              1077
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.02121,
+            "indicator_ess_mean": 91955.74346215805,
+            "indicator_mcse_mean": 0.00047514683152869943
+          },
+          "Physics": {
+            "count_alpha_ge_1": 873,
+            "count_alpha_ge_1_by_chain": [
+              441,
+              432
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00873,
+            "indicator_ess_mean": 89095.61569113031,
+            "indicator_mcse_mean": 0.00031165715946298493
+          }
+        },
+        "total_run_seconds": 43.49534012499498
+      },
+      {
+        "label": "sweep_20",
+        "lag": 20,
+        "position": "senior",
+        "draws_per_chain": 50000,
+        "chains": 2,
+        "cores": 2,
+        "tune_per_chain": 1000,
+        "target_accept": 0.99,
+        "random_seed": 2026110020,
+        "stored_variables": [
+          "mu",
+          "sigma",
+          "alpha"
+        ],
+        "prior_sampling": false,
+        "started_at_utc": "2026-10-09T07:43:27.942351+00:00",
+        "finished_sampling_at_utc": "2026-10-09T07:44:12.279021+00:00",
+        "sampling_and_preprocessing_seconds": 44.195657124975696,
+        "prize_names": [
+          "Chemistry",
+          "Economics",
+          "PhysMed",
+          "Physics"
+        ],
+        "data": {
+          "shape": [
+            125,
+            4
+          ],
+          "workforce_ratio_min": 0.027936368837747756,
+          "workforce_ratio_max": 0.2979145802891736,
+          "total_laureates_by_field": [
+            200,
+            99,
+            232,
+            230
+          ],
+          "female_laureates_by_field": [
+            7,
+            3,
+            12,
+            4
+          ]
+        },
+        "trace_type": "xarray.core.datatree.DataTree",
+        "posterior_attrs": {
+          "created_at": "2026-10-09T07:44:11.985011+00:00",
+          "creation_library": "ArviZ",
+          "creation_library_version": "1.3.1",
+          "creation_library_language": "Python",
+          "inference_library": "pymc",
+          "inference_library_version": "6.3.2",
+          "sample_dims": [
+            "chain",
+            "draw"
+          ],
+          "sampling_time": 41.341928005218506,
+          "tuning_steps": 1000
+        },
+        "root_attrs": {},
+        "diagnostics": {
+          "helper": "arviz_stats",
+          "sample_stats_variables": [
+            "largest_eigval",
+            "step_size",
+            "perf_counter_start",
+            "smallest_eigval",
+            "diverging",
+            "energy_error",
+            "n_steps",
+            "lp",
+            "perf_counter_diff",
+            "reached_max_treedepth",
+            "acceptance_rate",
+            "index_in_trajectory",
+            "process_time_diff",
+            "divergences",
+            "tree_depth",
+            "step_size_bar",
+            "max_energy_error",
+            "energy"
+          ],
+          "unavailable": {},
+          "rhat_rank": {
+            "mu": 1.0001642619736852,
+            "sigma": 1.0000377598862273,
+            "alpha": {
+              "Chemistry": 1.0000107832273715,
+              "Economics": 1.0000067304783424,
+              "PhysMed": 1.0000136867635552,
+              "Physics": 1.0000151445758538
+            }
+          },
+          "ess_bulk": {
+            "mu": 24844.266269813546,
+            "sigma": 22835.728757176326,
+            "alpha": {
+              "Chemistry": 78761.05446777305,
+              "Economics": 56089.15926324634,
+              "PhysMed": 99781.56165129933,
+              "Physics": 86549.90291817987
+            }
+          },
+          "ess_tail": {
+            "mu": 26921.029630167253,
+            "sigma": 25988.873706342743,
+            "alpha": {
+              "Chemistry": 72402.02295765838,
+              "Economics": 53123.44550043854,
+              "PhysMed": 77366.89384408506,
+              "Physics": 77034.31911730209
+            }
+          },
+          "mcse_mean": {
+            "mu": 0.0027808098065120806,
+            "sigma": 0.0024340977535350734,
+            "alpha": {
+              "Chemistry": 0.0009393100168633985,
+              "Economics": 0.0006172062863733217,
+              "PhysMed": 0.0005498801581164286,
+              "Physics": 0.0006345330542043931
+            }
+          },
+          "divergences_by_chain": [
+            0,
+            0
+          ],
+          "divergences_total": 0,
+          "max_treedepth_hits_by_chain": [
+            0,
+            0
+          ],
+          "acceptance_rate": {
+            "min": 0.34891341873731013,
+            "max": 1.0000000000000004,
+            "mean": 0.9875891013407212
+          },
+          "tree_depth": {
+            "min": 2,
+            "max": 7,
+            "mean": 4.6583
+          },
+          "n_steps": {
+            "min": 3.0,
+            "max": 127.0,
+            "mean": 26.3114
+          },
+          "step_size": {
+            "min": 0.12961722852927102,
+            "max": 0.13156015793431605,
+            "mean": 0.1305886932317935
+          },
+          "max_rhat_rank": 1.0001642619736852,
+          "min_ess_bulk": 22835.728757176326,
+          "min_ess_tail": 25988.873706342743,
+          "convergence_screen": {
+            "passed": true,
+            "concerns": [],
+            "criteria": "No divergences or reported tree-depth hits; all rank Rhat <= 1.01; all bulk and tail ESS >= 400. A screen, not proof of convergence or accurate rare-tail estimation."
+          }
+        },
+        "tail_probabilities": {
+          "Chemistry": {
+            "count_alpha_ge_1": 15556,
+            "count_alpha_ge_1_by_chain": [
+              7825,
+              7731
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.15556,
+            "indicator_ess_mean": 94218.47312336157,
+            "indicator_mcse_mean": 0.0011807759701934536
+          },
+          "Economics": {
+            "count_alpha_ge_1": 22,
+            "count_alpha_ge_1_by_chain": [
+              14,
+              8
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.00022,
+            "indicator_ess_mean": 91706.85959370855,
+            "indicator_mcse_mean": 4.897391502783665e-05
+          },
+          "PhysMed": {
+            "count_alpha_ge_1": 2960,
+            "count_alpha_ge_1_by_chain": [
+              1528,
+              1432
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.0296,
+            "indicator_ess_mean": 88066.06522193227,
+            "indicator_mcse_mean": 0.0005711091584269252
+          },
+          "Physics": {
+            "count_alpha_ge_1": 1192,
+            "count_alpha_ge_1_by_chain": [
+              603,
+              589
+            ],
+            "total_draws": 100000,
+            "probability_alpha_ge_1": 0.01192,
+            "indicator_ess_mean": 87099.2899980108,
+            "indicator_mcse_mean": 0.00036772998677751285
+          }
+        },
+        "total_run_seconds": 44.630303415993694
+      }
+    ],
+    "sweep_lags": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "sweep_prior_sampling": false,
+    "warmup_discarded": true
+  },
+  "diagnostics": {
+    "helper": "arviz_stats on xarray Dataset extracted from DataTree",
+    "all_runs_pass_convergence_screen": true,
+    "concerns": [],
+    "max_rhat_rank_all_runs": 1.0002244187773168,
+    "min_ess_bulk_all_runs": 4628.640605933425,
+    "min_ess_tail_all_runs": 5834.335430484536,
+    "total_divergences_all_runs": 0,
+    "total_max_treedepth_hits_all_runs": 0,
+    "sweep_min_ess_bulk": 17798.68102826135,
+    "sweep_min_ess_tail": 20187.48049799197,
+    "sweep_max_rhat_rank": 1.0002244187773168,
+    "zero_tail_event_field_lag_pairs": [
+      {
+        "lag": 0,
+        "field": "Economics"
+      },
+      {
+        "lag": 0,
+        "field": "PhysMed"
+      },
+      {
+        "lag": 1,
+        "field": "Economics"
+      },
+      {
+        "lag": 1,
+        "field": "Physics"
+      },
+      {
+        "lag": 2,
+        "field": "Economics"
+      },
+      {
+        "lag": 2,
+        "field": "PhysMed"
+      },
+      {
+        "lag": 3,
+        "field": "Economics"
+      },
+      {
+        "lag": 3,
+        "field": "PhysMed"
+      },
+      {
+        "lag": 4,
+        "field": "Economics"
+      },
+      {
+        "lag": 5,
+        "field": "Economics"
+      },
+      {
+        "lag": 6,
+        "field": "Economics"
+      },
+      {
+        "lag": 7,
+        "field": "Economics"
+      },
+      {
+        "lag": 8,
+        "field": "Economics"
+      },
+      {
+        "lag": 9,
+        "field": "Economics"
+      },
+      {
+        "lag": 10,
+        "field": "Economics"
+      },
+      {
+        "lag": 11,
+        "field": "Economics"
+      },
+      {
+        "lag": 12,
+        "field": "Economics"
+      }
+    ],
+    "limitations": [
+      "Two chains and these diagnostics do not prove convergence; PyMC recommends at least four chains for robust diagnostics.",
+      "Very small posterior tail probabilities remain Monte Carlo estimates; bulk/tail ESS is not a guarantee of threshold accuracy.",
+      "A plotted zero means no observed alpha>=1 events, not exact zero probability.",
+      "No independent uncertainty interval is plotted; event counts and available threshold indicator MCSE/ESS are recorded per lag."
+    ]
+  },
+  "plotting": {
+    "alpha_method": "Existing plot_alpha_distributions",
+    "alpha_bins": {
+      "start": 0,
+      "stop": 2.5,
+      "edges": 201,
+      "bins": 200,
+      "width": 0.0125
+    },
+    "alpha_normalization": "weights=1/(ALL draws * bin width), preserving omitted prior tail mass",
+    "probability_method": "Existing plot_delay_sweep on all raw alpha samples from all 21 lags",
+    "probability_definition": "1 - count(alpha < 1) / count(alpha)",
+    "png_dpi": 150,
+    "pdf_dpi": 300,
+    "bbox_inches": "tight",
+    "backend": "Agg",
+    "same_figure_for_pdf_and_png": true,
+    "plt_show_disabled": true,
+    "figures_closed": true,
+    "alpha_replot": {
+      "sampling_rerun": false,
+      "posterior_draws": 20000,
+      "prior_draws": 20000,
+      "plotting_source_sha256": "eed848b44d217a77e074f284d622efb29e8e1f3d25c56e2fecaff1212065efad",
+      "cached_samples_sha256": {
+        "posterior": "fafb22541c153fd57cbb74d1bcc13ed70dc58e51a87b6090c5da7f53054e83cb",
+        "prior": "a6a1b558180e21a99710456bce14e6772cf31c52f253041960044d2a50ed224e"
+      }
+    }
+  },
+  "artifacts": [
+    {
+      "path": "figs/readme/alphaDistribution.png",
+      "sha256": "a73541bf103352250e7273e805e2d93926852a75e549f2893e2b3f4137192f91",
+      "bytes": 44340
+    },
+    {
+      "path": "figs/readme/alphaDistribution.pdf",
+      "sha256": "828174eb47d24a871d23d10c1aa4caeea7a6f76a166935c9198b232ceaa42407",
+      "bytes": 46723
+    },
+    {
+      "path": "figs/readme/probabilityVsDelay.png",
+      "sha256": "e1217d6d5f8ba65922e6008966cb3132d617c0b57cf7df471c3fefec87fc326a",
+      "bytes": 50106
+    },
+    {
+      "path": "figs/readme/probabilityVsDelay.pdf",
+      "sha256": "8fb365f219de7e4e953f323bc87bcd44d819151a20c53af81c5422d603b5784f",
+      "bytes": 24344
+    }
+  ],
+  "protected_files_unchanged": true,
+  "timing": {
+    "started_at_utc": "2026-10-09T07:27:45.343754+00:00",
+    "finished_at_utc": "2026-10-09T07:44:54.097981+00:00",
+    "elapsed_wall_seconds": 1028.7542262077332,
+    "sampling_preprocessing_diagnostics_seconds": 929.8563769200118,
+    "render_and_validation_seconds": 5.806461375032086
+  },
+  "remaining_issues": [
+    "pyproject.toml remains malformed and untouched; installed python3 was used directly."
+  ],
+  "post_generation_formatting": {
+    "source": "src/nobelgenderbias/analysis.py",
+    "sha256_after_formatting": "65f45860152e7f412b5e7101134436f08c079c38d57b5c60a7b6fc594f4420ff",
+    "ast_unchanged": true,
+    "note": "Only formatting changed after sampling; input_sha256 retains the exact source hash used for generation."
+  }
+}

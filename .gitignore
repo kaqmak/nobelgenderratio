@@ -1,0 +1,11 @@
+*.DS_Store
+*.pdf
+*.png
+!/figs/readme/alphaDistribution.png
+!/figs/readme/nobelLaureatesByGender.png
+!/figs/readme/probabilityVsDelay.png
+**__pycache__/
+**.egg-info/
+*.xlsx
+debug.json
+*.zip
